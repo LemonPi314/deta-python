@@ -44,13 +44,27 @@ class DriveStreamingBody:
             pass
 
 
-class _Drive(_Service):
-    def __init__(self, name: str, project_key: str, project_id: str, *, host: Optional[str] = None):
+class Drive(_Service):
+    def __init__(
+        self,
+        name: str,
+        *,
+        project_key: Optional[str] = None,
+        project_id: Optional[str] = None,
+        host: Optional[str] = None,
+    ):
         if not name:
             raise ValueError("parameter 'name' must be a non-empty string")
 
         host = host or os.getenv("DETA_DRIVE_HOST") or "drive.deta.sh"
-        super().__init__(project_key, project_id, host, name, DRIVE_SERVICE_TIMEOUT, False)
+        super().__init__(
+            name=name,
+            host=host,
+            timeout=DRIVE_SERVICE_TIMEOUT,
+            keep_alive=False,
+            project_key=project_key,
+            project_id=project_id,
+        )
 
     def _quote(self, param: str) -> str:
         return quote_plus(param)

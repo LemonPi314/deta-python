@@ -6,19 +6,24 @@ import struct
 import urllib.error
 from typing import Mapping, MutableMapping, Optional, Tuple, Union
 
+from .utils import _get_project_key_id
+
 JSON_MIME = "application/json"
 
 
 class _Service:
     def __init__(
         self,
-        project_key: str,
-        project_id: str,
-        host: str,
+        *,
         name: str,
+        host: str,
         timeout: int,
         keep_alive: bool = True,
+        project_key: Optional[str] = None,
+        project_id: Optional[str] = None,
     ):
+        project_key, project_id = _get_project_key_id(project_key, project_id)
+
         self.project_key = project_key
         self.base_path = f"/v1/{project_id}/{name}"
         self.host = host

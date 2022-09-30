@@ -5,7 +5,7 @@ import random
 import string
 import unittest
 
-from deta import Deta
+import deta
 from deta.drive import UPLOAD_CHUNK_SIZE
 from deta.base import FetchResponse
 
@@ -40,9 +40,9 @@ class TestDriveMethods(unittest.TestCase):
         key = os.getenv("DETA_SDK_TEST_PROJECT_KEY")
         name = os.getenv("DETA_SDK_TEST_DRIVE_NAME")
         host = os.getenv("DETA_SDK_TEST_DRIVE_HOST")
-        self.assertIsNotNone(key)
         self.assertIsNotNone(name)
-        deta = Deta(key)
+        assert name
+        deta.init(key)
         self.drive = deta.Drive(name, host=host)
         return super().setUp()
 
@@ -185,10 +185,10 @@ class TestBaseMethods(unittest.TestCase):
     def setUp(self):
         key = os.getenv("DETA_SDK_TEST_PROJECT_KEY")
         name = os.getenv("DETA_SDK_TEST_BASE_NAME")
-        self.assertIsNotNone(key)
         self.assertIsNotNone(name)
-        deta = Deta(key)
-        self.db = deta.Base(str(name))
+        assert name
+        deta.init(key)
+        self.db = deta.Base(name)
         self.ttl_attribute = os.getenv("DETA_SDK_TEST_TTL_ATTRIBUTE") or "__expires"
         self.item1 = {"key": "existing1", "value": "test"}
         self.item2 = {"key": "existing2", "value": 7}

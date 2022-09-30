@@ -55,13 +55,27 @@ class Util:
         return self.Prepend(value)
 
 
-class _Base(_Service):
-    def __init__(self, name: str, project_key: str, project_id: str, *, host: Optional[str] = None):
+class Base(_Service):
+    def __init__(
+        self,
+        name: str,
+        *,
+        project_key: Optional[str] = None,
+        project_id: Optional[str] = None,
+        host: Optional[str] = None,
+    ):
         if not name:
             raise ValueError("parameter 'name' must be a non-empty string")
 
         host = host or os.getenv("DETA_BASE_HOST") or "database.deta.sh"
-        super().__init__(project_key, project_id, host, name, BASE_SERVICE_TIMEOUT)
+        super().__init__(
+            name=name,
+            host=host,
+            timeout=BASE_SERVICE_TIMEOUT,
+            project_key=project_key,
+            project_id=project_id,
+        )
+
         self._ttl_attribute = BASE_TTL_ATTRIBUTE
         self.util = Util()
 

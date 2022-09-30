@@ -4,7 +4,7 @@ import os
 import pytest
 import random
 import string
-from deta import Deta
+import deta
 
 try:
     from dotenv import load_dotenv
@@ -23,11 +23,10 @@ BASE_TEST_TTL_ATTRIBUTE = os.getenv("DETA_SDK_TEST_TTL_ATTRIBUTE") or "__expires
 
 @pytest.fixture()
 async def db():
-    assert PROJECT_KEY
     assert BASE_NAME
     assert BASE_TEST_TTL_ATTRIBUTE
 
-    deta = Deta(PROJECT_KEY)
+    deta.init(PROJECT_KEY)
     db = deta.AsyncBase(BASE_NAME)
 
     yield db

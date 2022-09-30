@@ -11,18 +11,21 @@ else:
     has_aiohttp = True
 
 from deta.base import FetchResponse, Util, insert_ttl, BASE_TTL_ATTRIBUTE
+from deta.utils import _get_project_key_id
 
 
-class _AsyncBase:
+class AsyncBase:
     def __init__(
         self,
         name: str,
-        project_key: str,
-        project_id: str,
         *,
+        project_key: Optional[str] = None,
+        project_id: Optional[str] = None,
         host: Optional[str] = None,
         session: "Optional[aiohttp.ClientSession]" = None,
     ):
+        project_key, project_id = _get_project_key_id(project_key, project_id)
+
         if not has_aiohttp:
             raise RuntimeError("aiohttp library is required for async support")
 
